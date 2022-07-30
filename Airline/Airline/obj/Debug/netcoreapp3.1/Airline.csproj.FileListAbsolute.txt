@@ -126,3 +126,6 @@ D:\AIRLINE\Airline\Airline\obj\Debug\netcoreapp3.1\Airline.csproj.CopyComplete
 D:\AIRLINE\Airline\Airline\obj\Debug\netcoreapp3.1\Airline.dll
 D:\AIRLINE\Airline\Airline\obj\Debug\netcoreapp3.1\Airline.pdb
 D:\AIRLINE\Airline\Airline\obj\Debug\netcoreapp3.1\Airline.genruntimeconfig.cache
+D:\AIRLINE\Airline\Airline\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll
+D:\AIRLINE\Airline\Airline\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+D:\AIRLINE\Airline\Airline\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
