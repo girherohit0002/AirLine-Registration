@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Airline.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +13,26 @@ namespace Airline.Controllers
     [ApiController]
     public class FlightController : ControllerBase
     {
+        AirLineContext ac = new AirLineContext();
         // GET: api/<FlightsController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                using (ac)
+                {
+                    return Ok(ac.Flights.ToList());
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
         }
 
-        // GET api/<FlightsController>/5
-        [HttpGet("{id}")]
+            // GET api/<FlightsController>/5
+            [HttpGet("{id}")]
         public string Get(int id)
         {
             return "value";
