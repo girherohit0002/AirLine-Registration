@@ -11,6 +11,7 @@ namespace Airline.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Route("GetAll")]
     public class FlightController : ControllerBase
     {
         AirLineContext ac = new AirLineContext();
@@ -40,15 +41,67 @@ namespace Airline.Controllers
 
         // GET api/<FlightController>/5
         [HttpGet()]
-        [Route("List")]
+        [Route("GetById")]
         public IActionResult GetById(string flightnumber)
         {
             try
             {
-                var flight = from Flight in ac.Flights where Flight.FlightNumber == flightnumber select Flight;
-                return Ok(flight);
+                var data = from Flight in ac.Flights where Flight.FlightNumber == flightnumber select Flight;
+                if (data != null)
+                {
+                    return Ok(data);
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
             catch(Exception ex)
+            {
+                return BadRequest("The exception ouccured is " + ex);
+            }
+        }
+
+        [HttpPost]
+        [Route("GetByLocation")]
+        public IActionResult GetByLocation(string arCity,string dpCity)
+        {
+            try
+            {
+                var data = from Flight in ac.Flights where (Flight.ArrCity == arCity && Flight.DepCity == dpCity) select Flight;
+                if(data!=null)
+                {
+                    return Ok(data);
+                }
+                else
+                {
+                    return NotFound();
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("The exception ouccured is " + ex);
+            }
+        }
+        [HttpPost]
+        [Route("GetByDate")]
+        public IActionResult GetByDate(string arrDate, string dpDate)
+        {
+            try
+            {
+                var data = from Flight in ac.Flights where (Flight.TimeOfArr.Date.ToString()== arrDate && Flight.TimeOfDept.Date.ToString()==dpDate) select Flight;
+                if (data != null)
+                {
+                    return Ok(data);
+                }
+                else
+                {
+                    return NotFound();
+                }
+
+            }
+            catch (Exception ex)
             {
                 return BadRequest("The exception ouccured is " + ex);
             }

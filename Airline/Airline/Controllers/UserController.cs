@@ -68,7 +68,7 @@ namespace Airline.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public User Login([FromBody]string pass,[FromBody]string email)
+        public IActionResult Login(string email,string pass)
         {
             try
             {
@@ -77,17 +77,17 @@ namespace Airline.Controllers
                     User u = ac.Users.Find(email);
                     if (u == null)
                     {
-                        return null;
+                        return NotFound();
                     }
                     else
                     {
                         if (u.UserPwd == pass)
                         {
-                            return u;
+                            return Created("Found The User", u);
                         }
                         else
                         {
-                            return null;
+                            return BadRequest("Invalid creadential");
                         }
                     }
                 }
@@ -96,6 +96,10 @@ namespace Airline.Controllers
                 return null;
             }
         }
+
+       
+
+       
 
 
     }
