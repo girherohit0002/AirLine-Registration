@@ -6,7 +6,14 @@ using System.Collections.Generic;
 namespace Airline.Models
 {
     public partial class User
+
     {
+        public class userlogin
+        {
+            public string email { get; set; }
+
+            public string pass { get; set; }
+        }
         public User()
         {
             Tickets = new HashSet<Ticket>();

@@ -62,13 +62,20 @@ namespace Airline.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("GetByLocation")]
-        public IActionResult GetByLocation(string arCity,string dpCity)
+        /*
+ * This is searching flight on basis of 
+ * -->One way / Return 
+ * -->Departure date
+ * -->From to
+*/
+
+        [HttpGet]
+        [Route("GetOneWay")]
+        public IActionResult GetOneWay(string depDate,string arCity,string dpCity)
         {
             try
             {
-                var data = from Flight in ac.Flights where (Flight.ArrCity == arCity && Flight.DepCity == dpCity) select Flight;
+                var data = from Flight in ac.Flights where (Flight.ArrCity == arCity && Flight.DepCity == dpCity && Flight.TimeOfArr.Date.ToString() == depDate) select Flight;
                 if(data!=null)
                 {
                     return Ok(data);
@@ -84,28 +91,13 @@ namespace Airline.Controllers
                 return BadRequest("The exception ouccured is " + ex);
             }
         }
-        [HttpPost]
-        [Route("GetByDate")]
-        public IActionResult GetByDate(string arrDate, string dpDate)
-        {
-            try
-            {
-                var data = from Flight in ac.Flights where (Flight.TimeOfArr.Date.ToString()== arrDate && Flight.TimeOfDept.Date.ToString()==dpDate) select Flight;
-                if (data != null)
-                {
-                    return Ok(data);
-                }
-                else
-                {
-                    return NotFound();
-                }
 
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("The exception ouccured is " + ex);
-            }
-        }
+        
+
+
+
+
+
 
         // POST api/<FlightController>
         [HttpPost]

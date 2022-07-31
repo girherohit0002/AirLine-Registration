@@ -34,7 +34,8 @@ namespace Airline.Controllers
 
         // POST api/<UserController>
         [HttpPost]
-        public IActionResult Post([FromBody] User value)
+        [Route("SignUp")]
+        public IActionResult SignUp([FromBody] User value)
         {
             if (ModelState.IsValid)
             {
@@ -68,8 +69,10 @@ namespace Airline.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public IActionResult Login(string email,string pass)
+        public IActionResult Login(User.userlogin userlogin)
         {
+            string email = userlogin.email;
+            string pass = userlogin.pass;
             try
             {
                 using (ac)
