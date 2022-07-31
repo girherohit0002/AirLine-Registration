@@ -100,9 +100,29 @@ namespace Airline.Controllers
             }
         }
 
-       
 
-       
+
+        [HttpPut]
+        [Route("ResetPassword")]
+        public IActionResult Registration(string email,string pass)
+        {
+            if (email == null)
+            {
+                return BadRequest("Email cannot be null");
+            }
+            var data = ac.Users.Where(d => d.EmailId == email).FirstOrDefault();
+
+            if (data == null)
+            {
+                return NotFound($"User Does not exist");
+            }
+            
+            User ouser = ac.Users.Find(data.EmailId);
+            ouser.UserPwd = pass;
+            ac.SaveChanges();
+            return Ok($"Hey {ouser.FirstName} your password has been updated successfully");
+
+        }
 
 
     }

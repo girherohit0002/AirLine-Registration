@@ -53,20 +53,20 @@ namespace Airline.Controllers
 
         [HttpGet]
         [Route("Status")]
-        public IActionResult GetStatus([FromBody] string ticketnumber)
+        public IActionResult GetStatus(string ticketnumber)
         {
             try
             {
                 using (ac)
                 {
-                    Ticket ticket = ac.Tickets.Find(ticketnumber);
-                    if (ticket == null)
+                    Ticket data = ac.Tickets.Where(t=>t.TicketId==ticketnumber).FirstOrDefault();
+                    if (data == null)
                     {
                         return NotFound("Ticket Not Found");
                     }
                     else
                     {
-                        return Ok(ticket.TicketStatus);
+                        return Ok(data.TicketStatus);
                     }
                 }
             }catch(Exception ex)

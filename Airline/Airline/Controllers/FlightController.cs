@@ -101,8 +101,28 @@ namespace Airline.Controllers
 
         // POST api/<FlightController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Route("AddFlight")]
+        public IActionResult AddFlight([FromBody] Flight value)
         {
+            try
+            {
+                using (ac)
+                {
+                    if (value != null)
+                    {
+                        ac.Flights.Add(value);
+                        ac.SaveChanges();
+                        return Ok();
+                    }
+                    else
+                    {
+                        return NoContent();
+                    }
+                }
+            }catch(Exception ex)
+            {
+                return BadRequest(ex + " has occured");
+            }
         }
 
         // PUT api/<FlightController>/5
@@ -112,9 +132,30 @@ namespace Airline.Controllers
         }
 
         // DELETE api/<FlightController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete]
+        [Route("DeleteFlight")]
+        public IActionResult DeleteFlight(string flightnumber)
         {
+            try
+            {
+                using (ac)
+                {
+                    Flight f = ac.Flights.Find(flightnumber);
+                    if (f == null)
+                    {
+                        return NotFound($"Flight with {flightnumber} is not present");
+                    }
+                    else
+                    {
+                        ac.Flights.Remove(f);
+                        ac.SaveChanges();
+                        return Ok("Flight deleted successfully");
+                    }
+                }
+            }catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
     }
 }
