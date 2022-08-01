@@ -29,7 +29,7 @@ namespace Airline.Controllers
         // GET api/<TicketController>/5
         [HttpDelete]
         [Route("TDelete")]
-        public IActionResult Deletet(string tickenumber)
+        public IActionResult DeleteTicket(string tickenumber)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace Airline.Controllers
                         t.FlightNumber = flightnumber;
                         t.EmailId = u.EmailId;
                         t.TicketStatus = "Booked";
-                        t.DateOfIssue = f.TimeOfArr.Date;
+                        t.DateOfIssue = Convert.ToDateTime(f.TimeOfArr);
                         f.SeatsBussiness--;
 
                         var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -109,7 +109,7 @@ namespace Airline.Controllers
                         t.FlightNumber = flightnumber;
                         t.EmailId = u.EmailId;
                         t.TicketStatus = "Booked";
-                        t.DateOfIssue = f.TimeOfArr.Date;
+                        t.DateOfIssue = Convert.ToDateTime(f.TimeOfArr);
                         f.SeatsEco--;
 
                         var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -128,7 +128,6 @@ namespace Airline.Controllers
                         var finalString = new String(stringChars);
 
                         t.TicketId = finalString;
-                        ac.Tickets.Add(t);
                         ac.SaveChanges();
                         return Ok("Tickek booked successfully");
                     }
@@ -158,7 +157,7 @@ namespace Airline.Controllers
                     }
                     t.TicketStatus = "Cancelled";
                     ac.SaveChanges();
-                    return Ok("Ticket has been deleted");
+                    return Ok("Ticket has been cancelled");
                 }
             }
             catch (Exception ex)

@@ -25,8 +25,8 @@ namespace Airline.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server=ROHIT-PREDATOR1\\RO1;database=AirLine;trusted_connection=True;");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=ROHIT-PREDATOR1\\RO1;Database=AirLine;Trusted_Connection=True;");
             }
         }
 
@@ -37,7 +37,7 @@ namespace Airline.Models
             modelBuilder.Entity<Flight>(entity =>
             {
                 entity.HasKey(e => e.FlightNumber)
-                    .HasName("PK__flight__340D78BAE1BDC09B");
+                    .HasName("PK__flight__340D78BA78741FFA");
 
                 entity.ToTable("flight");
 
@@ -64,18 +64,24 @@ namespace Airline.Models
                     .IsUnicode(false)
                     .HasColumnName("duration");
 
-                entity.Property(e => e.Price).HasColumnName("price");
+                entity.Property(e => e.PriceBn).HasColumnName("price_bn");
+
+                entity.Property(e => e.PriceEco).HasColumnName("price_eco");
 
                 entity.Property(e => e.SeatsBussiness).HasColumnName("seats_bussiness");
 
                 entity.Property(e => e.SeatsEco).HasColumnName("seats_eco");
 
                 entity.Property(e => e.TimeOfArr)
-                    .HasColumnType("datetime")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
                     .HasColumnName("time_of_arr");
 
                 entity.Property(e => e.TimeOfDept)
-                    .HasColumnType("datetime")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
                     .HasColumnName("time_of_dept");
             });
 
@@ -111,22 +117,22 @@ namespace Airline.Models
                 entity.HasOne(d => d.Email)
                     .WithMany(p => p.Tickets)
                     .HasForeignKey(d => d.EmailId)
-                    .HasConstraintName("FK__tickets__email_i__3C69FB99");
+                    .HasConstraintName("FK__tickets__email_i__4E88ABD4");
 
                 entity.HasOne(d => d.FlightNumberNavigation)
                     .WithMany(p => p.Tickets)
                     .HasForeignKey(d => d.FlightNumber)
-                    .HasConstraintName("FK__tickets__flight___3D5E1FD2");
+                    .HasConstraintName("FK__tickets__flight___4F7CD00D");
             });
 
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(e => e.EmailId)
-                    .HasName("PK__users__3FEF87669991A0CE");
+                    .HasName("PK__users__3FEF87664BBC604F");
 
                 entity.ToTable("users");
 
-                entity.HasIndex(e => e.Userid, "UQ__users__CBA1B256A223FAD7")
+                entity.HasIndex(e => e.Userid, "UQ__users__CBA1B256B7E44A55")
                     .IsUnique();
 
                 entity.Property(e => e.EmailId)

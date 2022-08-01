@@ -11,12 +11,13 @@ namespace Airline.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Route("GetAll")]
+    
     public class FlightController : ControllerBase
     {
         AirLineContext ac = new AirLineContext();
         // GET: api/<FlightController>
         [HttpGet]
+        [Route("GetAllFlights")]
         public IActionResult Get()
         {
             try
@@ -30,7 +31,8 @@ namespace Airline.Controllers
                                Duration = Flight.Duration,
                                From = Flight.ArrCity,
                                To = Flight.DepCity,
-                               Price = Flight.Price,
+                               PriceOfEco = Flight.PriceEco,
+                               PriceOfBuiss = Flight.PriceBn,
                                EconomicalSeat = Flight.SeatsEco,
                                BuisenessSeat = Flight.SeatsBussiness
                            };
@@ -41,6 +43,8 @@ namespace Airline.Controllers
             }
         }
 
+
+    
         // GET api/<FlightController>/5
         [HttpGet()]
         [Route("GetById")]
@@ -69,7 +73,8 @@ namespace Airline.Controllers
  * -->One way / Return 
  * -->Departure date
  * -->From to
-*/
+*/      [HttpGet]
+
 
         [HttpGet]
         [Route("GetOneWay")]
@@ -77,7 +82,7 @@ namespace Airline.Controllers
         {
             try
             {
-                var data = from Flight in ac.Flights where (Flight.ArrCity == arCity && Flight.DepCity == dpCity && Flight.TimeOfArr.Date.ToString() == depDate) select Flight;
+                var data = from Flight in ac.Flights where (Flight.ArrCity == arCity &&  Flight.DepCity== dpCity && Convert.ToDateTime(Flight.TimeOfDept).ToString("dd-MM-yyyy") == depDate) select Flight;
                 if(data!=null)
                 {
                     return Ok(data);
@@ -94,36 +99,17 @@ namespace Airline.Controllers
             }
         }
 
-        
-
-
-
-
-
 
         // POST api/<FlightController>
         [HttpPost]
         [Route("AddFlight")]
         public IActionResult AddFlight([FromBody] Flight value)
         {
-            try
+            using (ac)
             {
-                using (ac)
-                {
-                    if (value != null)
-                    {
-                        ac.Flights.Add(value);
-                        ac.SaveChanges();
-                        return Ok();
-                    }
-                    else
-                    {
-                        return NoContent();
-                    }
-                }
-            }catch(Exception ex)
-            {
-                return BadRequest(ex + " has occured");
+                ac.Flights.Add(value);
+                ac.SaveChanges();
+                return Created("Flight Added Successfully",value);
             }
         }
 
@@ -157,6 +143,48 @@ namespace Airline.Controllers
             }catch(Exception ex)
             {
                 return BadRequest(ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("AllarrCity")]
+        public IActionResult getArrCity()
+        {
+            try
+            {
+                var data = from Flight in ac.Flights
+                           select new
+                           {
+                               
+                               From = Flight.ArrCity,
+                              
+                           };
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("The exception occured is " + ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("AlldepCity")]
+        public IActionResult getDepCity()
+        {
+            try
+            {
+                var data = from Flight in ac.Flights
+                           select new
+                           {
+
+                               From = Flight.DepCity,
+
+                           };
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("The exception occured is " + ex);
             }
         }
     }

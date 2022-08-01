@@ -11,13 +11,15 @@ namespace Airline.Models
         {
             Tickets = new HashSet<Ticket>();
         }
+
         public string FlightNumber { get; set; }
-        public DateTime TimeOfArr { get; set; }
+        public string TimeOfArr { get; set; }
         public string Duration { get; set; }
-        public int Price { get; set; }
+        public int PriceEco { get; set; }
+        public int PriceBn { get; set; }
         public string DepCity { get; set; }
         public string ArrCity { get; set; }
-        public DateTime TimeOfDept { get; set; }
+        public string TimeOfDept { get; set; }
         public int SeatsEco { get; set; }
         public int SeatsBussiness { get; set; }
 

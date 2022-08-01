@@ -107,11 +107,31 @@ namespace Airline.Controllers
                 return Ok($"Hey {ouser.FirstName} your password has been updated successfully");
             }catch(Exception ex)
             {
-                return BadRequest("Something went wrong while changind password. \n "+ex);
+                return BadRequest("Something went wrong while changing password. \n "+ex);
             }
 
         }
 
+        [HttpGet]
+        [Route("GetUserTicket")]
+        public IActionResult GetUserTicket(string email)
+        {
+            try
+            {
+                using (ac)
+                {
+                    var data = from Ticket in ac.Tickets where Ticket.EmailId == email select Ticket;
+                    if (data == null)
+                    {
+                        return NotFound("User has no bookings yet");
+                    }
+                    return Ok(data);
+                }
+            }catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }
