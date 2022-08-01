@@ -27,23 +27,113 @@ namespace Airline.Controllers
 
 
         // GET api/<TicketController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpDelete]
+        public IActionResult Delete(string tickenumber)
         {
-            return "value";
+            using (ac)
+            {
+                Ticket t = ac.Tickets.Find(tickenumber);
+                ac.Tickets.Remove(t);
+                ac.SaveChanges();
+                return Ok("Ticket has been deleted");
+            }
         }
 
         
 
         // PUT api/<TicketController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPost]
+        [Route("Book")]    
+        public IActionResult BookTicket([FromBody]User u,string flightnumber,string type,int numberOfPessanger)
         {
+            try
+            {
+                Flight f = ac.Flights.Find(flightnumber);
+                
+                if (type == "buiseness")
+                {
+                    if(f.SeatsBussiness < numberOfPessanger)
+                    {
+                        return BadRequest("Seats are not available");
+                    }
+                    else
+                    {
+                        Ticket t = new Ticket();
+                        t.FlightNumber = flightnumber;
+                        t.EmailId = u.EmailId;
+                        t.TicketStatus = "Booked";
+                        t.DateOfIssue = f.TimeOfArr.Date;
+                        f.SeatsBussiness--;
+
+                        var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                        var chars2 = "0123456789";
+                        var stringChars = new char[12];
+                        var random = new Random();
+
+                        for (int i = 0; i < 2; i++)
+                        {
+                            stringChars[i] = chars[random.Next(chars.Length)];
+                        }
+                        for (int i = 2; i < stringChars.Length; i++)
+                        {
+                            stringChars[i] = chars2[random.Next(chars2.Length)];
+                        }
+                        var finalString = new String(stringChars);
+
+                        t.TicketId = finalString;
+                        ac.Tickets.Add(t);
+                        ac.SaveChanges();
+                        return Ok("Tickek booked successfully");
+                    }
+                }else
+                {
+                    if (f.SeatsEco < numberOfPessanger)
+                    {
+                        return BadRequest("Seats are not available");
+                    }
+                    else
+                    {
+                        Ticket t = new Ticket();
+                        t.FlightNumber = flightnumber;
+                        t.EmailId = u.EmailId;
+                        t.TicketStatus = "Booked";
+                        t.DateOfIssue = f.TimeOfArr.Date;
+                        f.SeatsEco--;
+
+                        var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                        var chars2 = "0123456789";
+                        var stringChars = new char[8];
+                        var random = new Random();
+
+                        for (int i = 0; i < 2; i++)
+                        {
+                            stringChars[i] = chars[random.Next(chars.Length)];
+                        }
+                        for (int i = 2; i < stringChars.Length; i++)
+                        {
+                            stringChars[i] = chars2[random.Next(chars2.Length)];
+                        }
+                        var finalString = new String(stringChars);
+
+                        t.TicketId = finalString;
+                        ac.Tickets.Add(t);
+                        ac.SaveChanges();
+                        return Ok("Tickek booked successfully");
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("The exception is " + ex);
+            }
         }
 
+      
+
         // DELETE api/<TicketController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpPut]
+        [Route("Cancelled")]
+        public IActionResult CancelTicket(int id)
         {
         }
 
