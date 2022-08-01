@@ -28,14 +28,26 @@ namespace Airline.Controllers
 
         // GET api/<TicketController>/5
         [HttpDelete]
-        public IActionResult Delete(string tickenumber)
+        [Route("TDelete")]
+        public IActionResult Deletet(string tickenumber)
         {
-            using (ac)
+            try
             {
-                Ticket t = ac.Tickets.Find(tickenumber);
-                ac.Tickets.Remove(t);
-                ac.SaveChanges();
-                return Ok("Ticket has been deleted");
+                using (ac)
+                {
+                    Ticket t = ac.Tickets.Find(tickenumber);
+                    if (t == null)
+                    {
+                        return NotFound("Ticket is not found");
+                    }
+                    ac.Tickets.Remove(t);
+                    ac.SaveChanges();
+                    return Ok("Ticket has been deleted");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("The exception is " + ex);
             }
         }
 
@@ -130,11 +142,29 @@ namespace Airline.Controllers
 
       
 
-        // DELETE api/<TicketController>/5
+        //// DELETE api/<TicketController>/5
         [HttpPut]
         [Route("Cancelled")]
-        public IActionResult CancelTicket(int id)
+        public IActionResult CancelTicket(string tickenumber)
         {
+            try
+            {
+                using (ac)
+                {
+                    Ticket t = ac.Tickets.Find(tickenumber);
+                    if (t == null)
+                    {
+                        return NotFound("Ticket is not found");
+                    }
+                    t.TicketStatus = "Cancelled";
+                    ac.SaveChanges();
+                    return Ok("Ticket has been deleted");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("The exception is " + ex);
+            }
         }
 
 

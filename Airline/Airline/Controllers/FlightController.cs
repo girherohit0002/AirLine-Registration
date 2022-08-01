@@ -30,7 +30,9 @@ namespace Airline.Controllers
                                Duration = Flight.Duration,
                                From = Flight.ArrCity,
                                To = Flight.DepCity,
-                               Price = Flight.Price
+                               Price = Flight.Price,
+                               EconomicalSeat = Flight.SeatsEco,
+                               BuisenessSeat = Flight.SeatsBussiness
                            };
                 return Ok(data);
             }catch(Exception ex)

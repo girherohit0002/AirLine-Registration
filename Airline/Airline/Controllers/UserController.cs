@@ -25,12 +25,6 @@ namespace Airline.Controllers
             }
         }
 
-        // GET api/<UserController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
 
         // POST api/<UserController>
         [HttpPost]
@@ -51,21 +45,9 @@ namespace Airline.Controllers
                 }
 
             }
-            return BadRequest("Something went wrong while saving the record");
+            return BadRequest("Something went wrong while while sign-up.");
         }
 
-
-        // PUT api/<UserController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<UserController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
 
         [HttpPost]
         [Route("Login")]
@@ -96,7 +78,7 @@ namespace Airline.Controllers
                 }
             }catch(Exception ex)
             {
-                return null;
+                return BadRequest("Something went wrong while login. \n " + ex); 
             }
         }
 
@@ -104,23 +86,29 @@ namespace Airline.Controllers
 
         [HttpPut]
         [Route("ResetPassword")]
-        public IActionResult Registration(string email,string pass)
+        public IActionResult changePassword(string email,string pass)
         {
-            if (email == null)
+            try
             {
-                return BadRequest("Email cannot be null");
-            }
-            var data = ac.Users.Where(d => d.EmailId == email).FirstOrDefault();
+                if (email == null)
+                {
+                    return BadRequest("Email cannot be null");
+                }
+                var data = ac.Users.Where(d => d.EmailId == email).FirstOrDefault();
 
-            if (data == null)
+                if (data == null)
+                {
+                    return NotFound($"User Does not exist");
+                }
+
+                User ouser = ac.Users.Find(data.EmailId);
+                ouser.UserPwd = pass;
+                ac.SaveChanges();
+                return Ok($"Hey {ouser.FirstName} your password has been updated successfully");
+            }catch(Exception ex)
             {
-                return NotFound($"User Does not exist");
+                return BadRequest("Something went wrong while changind password. \n "+ex);
             }
-            
-            User ouser = ac.Users.Find(data.EmailId);
-            ouser.UserPwd = pass;
-            ac.SaveChanges();
-            return Ok($"Hey {ouser.FirstName} your password has been updated successfully");
 
         }
 
