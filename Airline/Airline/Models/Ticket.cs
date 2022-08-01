@@ -7,6 +7,11 @@ namespace Airline.Models
 {
     public partial class Ticket
     {
+        public Ticket()
+        {
+            Passengers = new HashSet<Passenger>();
+        }
+
         public string TicketId { get; set; }
         public string TicketStatus { get; set; }
         public DateTime DateOfIssue { get; set; }
@@ -15,5 +20,6 @@ namespace Airline.Models
 
         public virtual User Email { get; set; }
         public virtual Flight FlightNumberNavigation { get; set; }
+        public virtual ICollection<Passenger> Passengers { get; set; }
     }
 }

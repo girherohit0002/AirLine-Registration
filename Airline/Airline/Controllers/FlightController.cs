@@ -22,21 +22,24 @@ namespace Airline.Controllers
         {
             try
             {
-                var data = from Flight in ac.Flights
-                           select new
-                           {
-                               FlightNumber = Flight.FlightNumber,
-                               timeOfArrival = Flight.TimeOfArr,
-                               timeOfDeparture = Flight.TimeOfDept,
-                               Duration = Flight.Duration,
-                               From = Flight.ArrCity,
-                               To = Flight.DepCity,
-                               PriceOfEco = Flight.PriceEco,
-                               PriceOfBuiss = Flight.PriceBn,
-                               EconomicalSeat = Flight.SeatsEco,
-                               BuisenessSeat = Flight.SeatsBussiness
-                           };
-                return Ok(data);
+                //var data = from Flight in ac.Flights
+                //           select new
+                //           {
+                //               FlightNumber = Flight.FlightNumber,
+                //               FlightName = Flight.FlightName,
+                //               timeOfArrival = Flight.TimeOfArr,
+                //               DateOfArrival = Flight.DateOfArr,
+                //               timeOfDeparture = Flight.TimeOfDept,
+                //               DateOfDeparture = Flight.DateOfDept,
+                //               Duration = Flight.Duration,
+                //               From = Flight.ArrCity,
+                //               To = Flight.DepCity,
+                //               PriceOfEco = Flight.PriceEco,
+                //               PriceOfBuiss = Flight.PriceBn,
+                //               EconomicalSeat = Flight.SeatsEco,
+                //               BuisenessSeat = Flight.SeatsBussiness
+                //           };
+                return Ok(ac.Flights.ToList());
             }catch(Exception ex)
             {
                 return BadRequest("The exception occured is " + ex);
@@ -73,7 +76,7 @@ namespace Airline.Controllers
  * -->One way / Return 
  * -->Departure date
  * -->From to
-*/      [HttpGet]
+*/      
 
 
         [HttpGet]
@@ -82,7 +85,7 @@ namespace Airline.Controllers
         {
             try
             {
-                var data = from Flight in ac.Flights where (Flight.ArrCity == arCity &&  Flight.DepCity== dpCity && Convert.ToDateTime(Flight.TimeOfDept).ToString("dd-MM-yyyy") == depDate) select Flight;
+                var data = from Flight in ac.Flights where (Flight.ArrCity == arCity &&  Flight.DepCity== dpCity && Flight.DateOfDept.Date.ToString() == (depDate)) select  Flight;
                 if(data!=null)
                 {
                     return Ok(data);
@@ -105,11 +108,17 @@ namespace Airline.Controllers
         [Route("AddFlight")]
         public IActionResult AddFlight([FromBody] Flight value)
         {
-            using (ac)
+            try
             {
-                ac.Flights.Add(value);
-                ac.SaveChanges();
-                return Created("Flight Added Successfully",value);
+                using (ac)
+                {
+                    ac.Flights.Add(value);
+                    ac.SaveChanges();
+                    return Created("Flight Added Successfully", value);
+                }
+            }catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 
@@ -154,10 +163,8 @@ namespace Airline.Controllers
             {
                 var data = from Flight in ac.Flights
                            select new
-                           {
-                               
-                               From = Flight.ArrCity,
-                              
+                           {                               
+                               From = Flight.ArrCity,         
                            };
                 return Ok(data);
             }

@@ -25,6 +25,7 @@ namespace Airline.Models
         public class userlogin
         {
             public string email { get; set; }
+
             public string pass { get; set; }
         }
     }

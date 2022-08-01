@@ -56,10 +56,11 @@ namespace Airline.Controllers
         // PUT api/<TicketController>/5
         [HttpPost]
         [Route("Book")]    
-        public IActionResult BookTicket([FromBody]User u,string flightnumber,string type,int numberOfPessanger)
+        public IActionResult BookTicket([FromBody]User u,string flightnumber,string type,Array[] p)
         {
             try
             {
+                
                 Flight f = ac.Flights.Find(flightnumber);
                 
                 if (type == "buiseness")

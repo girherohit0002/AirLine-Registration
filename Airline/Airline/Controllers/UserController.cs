@@ -120,7 +120,16 @@ namespace Airline.Controllers
             {
                 using (ac)
                 {
-                    var data = from Ticket in ac.Tickets where Ticket.EmailId == email select Ticket;
+                    var data = from Ticket in ac.Tickets
+                               where Ticket.EmailId == email
+                               select new
+                               {
+                                   FlightOfJourney = Ticket.FlightNumber,
+                                   Email = Ticket.EmailId,
+                                   Id = Ticket.TicketId,
+                                   Status = Ticket.TicketStatus
+                               };
+                        
                     if (data == null)
                     {
                         return NotFound("User has no bookings yet");

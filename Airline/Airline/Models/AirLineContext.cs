@@ -18,6 +18,7 @@ namespace Airline.Models
         }
 
         public virtual DbSet<Flight> Flights { get; set; }
+        public virtual DbSet<Passenger> Passengers { get; set; }
         public virtual DbSet<Ticket> Tickets { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
@@ -25,7 +26,7 @@ namespace Airline.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Server=ROHIT-PREDATOR1\\RO1;Database=AirLine;Trusted_Connection=True;");
             }
         }
@@ -37,7 +38,7 @@ namespace Airline.Models
             modelBuilder.Entity<Flight>(entity =>
             {
                 entity.HasKey(e => e.FlightNumber)
-                    .HasName("PK__flight__340D78BA78741FFA");
+                    .HasName("PK__flight__340D78BA18D65E70");
 
                 entity.ToTable("flight");
 
@@ -52,6 +53,14 @@ namespace Airline.Models
                     .IsUnicode(false)
                     .HasColumnName("arr_city");
 
+                entity.Property(e => e.DateOfArr)
+                    .HasColumnType("date")
+                    .HasColumnName("date_of_arr");
+
+                entity.Property(e => e.DateOfDept)
+                    .HasColumnType("date")
+                    .HasColumnName("date_of_dept");
+
                 entity.Property(e => e.DepCity)
                     .IsRequired()
                     .HasMaxLength(20)
@@ -64,6 +73,11 @@ namespace Airline.Models
                     .IsUnicode(false)
                     .HasColumnName("duration");
 
+                entity.Property(e => e.FlightName)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("flight_name");
+
                 entity.Property(e => e.PriceBn).HasColumnName("price_bn");
 
                 entity.Property(e => e.PriceEco).HasColumnName("price_eco");
@@ -72,17 +86,36 @@ namespace Airline.Models
 
                 entity.Property(e => e.SeatsEco).HasColumnName("seats_eco");
 
-                entity.Property(e => e.TimeOfArr)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("time_of_arr");
+                entity.Property(e => e.TimeOfArr).HasColumnName("time_of_arr");
 
-                entity.Property(e => e.TimeOfDept)
-                    .IsRequired()
+                entity.Property(e => e.TimeOfDept).HasColumnName("time_of_dept");
+            });
+
+            modelBuilder.Entity<Passenger>(entity =>
+            {
+                entity.HasKey(e => e.PId)
+                    .HasName("PK__passenge__82E06B9154E0B358");
+
+                entity.ToTable("passenger");
+
+                entity.Property(e => e.PId).HasColumnName("p_id");
+
+                entity.Property(e => e.PAge).HasColumnName("p_age");
+
+                entity.Property(e => e.PFullName)
                     .HasMaxLength(50)
                     .IsUnicode(false)
-                    .HasColumnName("time_of_dept");
+                    .HasColumnName("p_fullName");
+
+                entity.Property(e => e.TicketId)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("ticket_id");
+
+                entity.HasOne(d => d.Ticket)
+                    .WithMany(p => p.Passengers)
+                    .HasForeignKey(d => d.TicketId)
+                    .HasConstraintName("FK__passenger__ticke__5BE2A6F2");
             });
 
             modelBuilder.Entity<Ticket>(entity =>
@@ -117,12 +150,12 @@ namespace Airline.Models
                 entity.HasOne(d => d.Email)
                     .WithMany(p => p.Tickets)
                     .HasForeignKey(d => d.EmailId)
-                    .HasConstraintName("FK__tickets__email_i__4E88ABD4");
+                    .HasConstraintName("FK__tickets__email_i__5812160E");
 
                 entity.HasOne(d => d.FlightNumberNavigation)
                     .WithMany(p => p.Tickets)
                     .HasForeignKey(d => d.FlightNumber)
-                    .HasConstraintName("FK__tickets__flight___4F7CD00D");
+                    .HasConstraintName("FK__tickets__flight___59063A47");
             });
 
             modelBuilder.Entity<User>(entity =>
