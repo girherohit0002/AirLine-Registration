@@ -84,7 +84,7 @@ namespace Airline.Controllers
                 }
                 else
                 {
-                    return NotFound();
+                    return NotFound("The flight is not present");
                 }
                 
             }

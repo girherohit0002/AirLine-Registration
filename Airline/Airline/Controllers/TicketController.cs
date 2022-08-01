@@ -114,7 +114,7 @@ namespace Airline.Controllers
 
                         var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                         var chars2 = "0123456789";
-                        var stringChars = new char[8];
+                        var stringChars = new char[12];
                         var random = new Random();
 
                         for (int i = 0; i < 2; i++)
