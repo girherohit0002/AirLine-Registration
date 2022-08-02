@@ -144,8 +144,9 @@ namespace Airline.Controllers
                     ac.Passengers.Add(p);
                     ac.SaveChanges();
                 }
+
                 u.Tickets.Add(t);
-                return Ok("Tickek booked successfully");
+                return Ok("Ticket booked successfully");
             }
             catch (Exception ex)
             {
@@ -192,6 +193,7 @@ namespace Airline.Controllers
         /// </summary>
         /// <param name="ticketnumber"></param>
         /// <returns></returns>
+
         [HttpGet]
         [Route("Status")]
         public IActionResult GetStatus(string ticketnumber)
