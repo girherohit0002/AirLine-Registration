@@ -14,6 +14,14 @@ namespace Airline.Models
 
         public virtual Ticket Ticket { get; set; }
 
-        
+        public class passdetails
+        {
+            public string pname { get; set; }
+            public int? page { get; set; }
+        }
+      
     }
+
+
+
 }

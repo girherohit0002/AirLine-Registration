@@ -118,25 +118,22 @@ namespace Airline.Controllers
         {
             try
             {
+                User u = ac.Users.Find(email);
+                    if (u == null)
+                    {
+                        return NotFound($"User with email {email} is not found");
+                    }
                 using (ac)
                 {
-                    var data = from Ticket in ac.Tickets
-                               where Ticket.EmailId == email
-                               select new
-                               {
-                                   FlightOfJourney = Ticket.FlightNumber,
-                                   Email = Ticket.EmailId,
-                                   Id = Ticket.TicketId,
-                                   Status = Ticket.TicketStatus
-                               };
-                        
+                    var data = ac.Tickets.Where(t => t.EmailId == email).ToList();
                     if (data == null)
                     {
-                        return NotFound("User has no bookings yet");
+                        return NoContent();
                     }
                     return Ok(data);
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

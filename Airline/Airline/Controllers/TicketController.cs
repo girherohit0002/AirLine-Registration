@@ -51,90 +51,87 @@ namespace Airline.Controllers
             }
         }
 
-        
+
 
         // PUT api/<TicketController>/5
         [HttpPost]
-        [Route("Book")]    
-        public IActionResult BookTicket([FromBody]User u,string flightnumber,string type,Array[] p)
+        [Route("Book")]
+        public IActionResult BookTicket(string Uemail, string flightnumber, string type,[FromBody] Passenger.passdetails[] passengers)
         {
+
             try
             {
-                
+                User u = ac.Users.Find(Uemail);
+                if (u == null)
+                {
+                    return NotFound($"User with {Uemail} not found");
+                }
                 Flight f = ac.Flights.Find(flightnumber);
-                
+                int numberOfPassenger = passengers.Length;
+
                 if (type == "buiseness")
                 {
-                    if(f.SeatsBussiness < numberOfPessanger)
+                    if (f.SeatsBussiness < numberOfPassenger)
                     {
                         return BadRequest("Seats are not available");
                     }
                     else
-                    {
-                        Ticket t = new Ticket();
-                        t.FlightNumber = flightnumber;
-                        t.EmailId = u.EmailId;
-                        t.TicketStatus = "Booked";
-                        t.DateOfIssue = Convert.ToDateTime(f.TimeOfArr);
-                        f.SeatsBussiness--;
-
-                        var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                        var chars2 = "0123456789";
-                        var stringChars = new char[12];
-                        var random = new Random();
-
-                        for (int i = 0; i < 2; i++)
-                        {
-                            stringChars[i] = chars[random.Next(chars.Length)];
-                        }
-                        for (int i = 2; i < stringChars.Length; i++)
-                        {
-                            stringChars[i] = chars2[random.Next(chars2.Length)];
-                        }
-                        var finalString = new String(stringChars);
-
-                        t.TicketId = finalString;
-                        ac.Tickets.Add(t);
-                        ac.SaveChanges();
-                        return Ok("Tickek booked successfully");
+                    { 
+                        f.SeatsBussiness--;   
                     }
-                }else
+                }else if (type == "economy")
                 {
-                    if (f.SeatsEco < numberOfPessanger)
+                    if (f.SeatsEco < numberOfPassenger)
                     {
                         return BadRequest("Seats are not available");
                     }
                     else
                     {
-                        Ticket t = new Ticket();
-                        t.FlightNumber = flightnumber;
-                        t.EmailId = u.EmailId;
-                        t.TicketStatus = "Booked";
-                        t.DateOfIssue = Convert.ToDateTime(f.TimeOfArr);
                         f.SeatsEco--;
-
-                        var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                        var chars2 = "0123456789";
-                        var stringChars = new char[12];
-                        var random = new Random();
-
-                        for (int i = 0; i < 2; i++)
-                        {
-                            stringChars[i] = chars[random.Next(chars.Length)];
-                        }
-                        for (int i = 2; i < stringChars.Length; i++)
-                        {
-                            stringChars[i] = chars2[random.Next(chars2.Length)];
-                        }
-                        var finalString = new String(stringChars);
-
-                        t.TicketId = finalString;
-                        ac.SaveChanges();
-                        return Ok("Tickek booked successfully");
                     }
                 }
+                else
+                {
+                    return BadRequest($"{type} class is Invalid");
+                }
+                Ticket t = new Ticket();
+                t.FlightNumber = flightnumber;
+                t.EmailId = u.EmailId;
+                t.TicketStatus = "Booked";
+                t.DateOfIssue = DateTime.Now.Date;
+                var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                var chars2 = "0123456789";
+                var stringChars = new char[12];
+                var random = new Random();
+
+                for (int i = 0; i < 2; i++)
+                {
+                    stringChars[i] = chars[random.Next(chars.Length)];
+                }
+                for (int i = 2; i < stringChars.Length; i++)
+                {
+                    stringChars[i] = chars2[random.Next(chars2.Length)];
+                }
+                var finalString = new String(stringChars);
+
+                t.TicketId = finalString;
+                ac.Tickets.Add(t);
+                ac.SaveChanges();
+
+                for (int i = 0; i < numberOfPassenger; i++)
+                {
+                    Passenger p = new Passenger();
+                    p.TicketId = finalString;
+                    p.PFullName = passengers[i].pname;
+                    p.PAge = passengers[i].page;
+
+                    ac.Passengers.Add(p);
+                    ac.SaveChanges();
+                }
+                u.Tickets.Add(t);
+                return Ok("Tickek booked successfully");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest("The exception is " + ex);
             }
@@ -194,5 +191,7 @@ namespace Airline.Controllers
                 return BadRequest("The exception is " + ex);
             }
         }
+
+        
     }
 }

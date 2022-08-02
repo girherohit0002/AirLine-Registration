@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace Airline.Controllers
 {
     [Route("api/[controller]")]
+    [Route("")]
     [ApiController]
     
     public class FlightController : ControllerBase
@@ -18,6 +19,7 @@ namespace Airline.Controllers
         // GET: api/<FlightController>
         [HttpGet]
         [Route("GetAllFlights")]
+        
         public IActionResult Get()
         {
             try
