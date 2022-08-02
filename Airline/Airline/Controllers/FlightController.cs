@@ -16,6 +16,11 @@ namespace Airline.Controllers
     public class FlightController : ControllerBase
     {
         AirLineContext ac = new AirLineContext();
+
+        /// <summary>
+        /// This will give Get all flights 
+        /// </summary>
+        /// <returns></returns>
         // GET: api/<FlightController>
         [HttpGet]
         [Route("GetAllFlights")]
@@ -49,7 +54,11 @@ namespace Airline.Controllers
         }
 
 
-    
+        /// <summary>
+        /// Getting Flight on basis of flight
+        /// </summary>
+        /// <param name="flightnumber"></param>
+        /// <returns></returns>
         // GET api/<FlightController>/5
         [HttpGet()]
         [Route("GetById")]
@@ -73,14 +82,19 @@ namespace Airline.Controllers
             }
         }
 
-        /*
- * This is searching flight on basis of 
- * -->One way / Return 
- * -->Departure date
- * -->From to
-*/      
-
-
+        
+        /// <summary>
+        /// /*
+        ///This is searching flight on basis of
+        /// -->One way / Return
+        ///-->Departure date
+        ///-->From to
+        ///
+        /// </summary>
+        /// <param name="depDate"></param>
+        /// <param name="arCity"></param>
+        /// <param name="dpCity"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetOneWay")]
         public IActionResult GetOneWay(string depDate,string arCity,string dpCity)
@@ -104,7 +118,11 @@ namespace Airline.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Admin will add flight using this 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         // POST api/<FlightController>
         [HttpPost]
         [Route("AddFlight")]
@@ -130,6 +148,12 @@ namespace Airline.Controllers
         {
         }
 
+
+        /// <summary>
+        /// Admin Can Delete the flight using this 
+        /// </summary>
+        /// <param name="flightnumber"></param>
+        /// <returns></returns>
         // DELETE api/<FlightController>/5
         [HttpDelete]
         [Route("DeleteFlight")]
@@ -157,6 +181,10 @@ namespace Airline.Controllers
             }
         }
 
+        /// <summary>
+        /// City of arrival
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("AllarrCity")]
         public IActionResult getArrCity()
@@ -176,6 +204,10 @@ namespace Airline.Controllers
             }
         }
 
+        /// <summary>
+        /// City of departure
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("AlldepCity")]
         public IActionResult getDepCity()

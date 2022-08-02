@@ -15,6 +15,11 @@ namespace Airline.Controllers
     public class UserController : ControllerBase
     {
         AirLineContext ac = new AirLineContext();
+
+        /// <summary>
+        /// Getting all user
+        /// </summary>
+        /// <returns></returns>
         // GET: api/<UserController>
         [HttpGet]
         public IEnumerable<User> Get()
@@ -26,6 +31,11 @@ namespace Airline.Controllers
         }
 
 
+        /// <summary>
+        /// This is for new registraion to the app
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         // POST api/<UserController>
         [HttpPost]
         [Route("SignUp")]
@@ -48,7 +58,11 @@ namespace Airline.Controllers
             return BadRequest("Something went wrong while while sign-up.");
         }
 
-
+        /// <summary>
+        /// Login into app
+        /// </summary>
+        /// <param name="userlogin"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("Login")]
         public IActionResult Login(User.userlogin userlogin)
@@ -83,7 +97,12 @@ namespace Airline.Controllers
         }
 
 
-
+        /// <summary>
+        /// If user wants to change password
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="pass"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("ResetPassword")]
         public IActionResult changePassword(string email,string pass)
@@ -112,6 +131,12 @@ namespace Airline.Controllers
 
         }
 
+        /// <summary>
+        /// If user want to see its bookings
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+
         [HttpGet]
         [Route("GetUserTicket")]
         public IActionResult GetUserTicket(string email)
@@ -128,7 +153,7 @@ namespace Airline.Controllers
                     var data = ac.Tickets.Where(t => t.EmailId == email).ToList();
                     if (data == null)
                     {
-                        return NoContent();
+                        return NotFound($"{u.FirstName} you have no bookings yet.");
                     }
                     return Ok(data);
                 }

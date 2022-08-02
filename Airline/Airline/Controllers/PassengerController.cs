@@ -14,6 +14,11 @@ namespace Airline.Controllers
     public class PassengerController : ControllerBase
     {
         AirLineContext ac = new AirLineContext();
+
+        /// <summary>
+        /// This Method will get the Passengers data
+        /// </summary>
+        /// <returns></returns>
         // GET: api/<PassengerController>
         [HttpGet]
         public IEnumerable<Passenger> Get()
@@ -24,13 +29,14 @@ namespace Airline.Controllers
                 }  
         }
 
-        // GET api/<PassengerController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
+        
+        
+        /// <summary>
+        /// The Method will add the passenger 
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns>Create Passenger</returns>
+        /// 
         // POST api/<PassengerController>
         [HttpPost]
         [Route("AddPassenger")]
@@ -47,6 +53,11 @@ namespace Airline.Controllers
             }
         }
 
+        /// <summary>
+        /// This method will return the Passangers details.
+        /// </summary>
+        /// <param name="ticketnumber"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetPByTI")]
         public IActionResult getByTid(string ticketnumber)
@@ -55,7 +66,8 @@ namespace Airline.Controllers
             {
                 using (ac)
                 {
-                    var data = from p in ac.Passengers where p.TicketId == ticketnumber select p;
+                    //var data = from p in ac.Passengers where p.TicketId == ticketnumber select p;
+                    var data = ac.Passengers.Where(t => t.TicketId == ticketnumber).ToList();
                     if (data == null)
                     {
                         return NotFound("No passenger");
@@ -66,6 +78,6 @@ namespace Airline.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }
+        }        
     }
 }
